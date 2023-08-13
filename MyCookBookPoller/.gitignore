@@ -2,6 +2,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=osx,node,linux,windows,sam
 
 .aws-sam
+.npmignore
+.prettierrc.js
 ### Linux ###
 *~
 
