@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  MyCookBookPoller
+
+  Sample SAM Template for MyCookBookPoller
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 300
+    Environment:
+      Variables:
+        HOST: "host.docker.internal"
+        USER: "franklynsanchez"
+        PASS: "password"
+        DB: "postgres"
+        SpoonApiUrl: "https://api.spoonacular.com/recipes"
+        SpoonApiKey: "c0e096ec62d34637aa213a706c547587"
+
+Resources:
+  MealPollerFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: .
+      Handler: src/app.lambdaHandler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      Events:
+        CloudWatchEvent:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 8 1 * ? *)
+      MemorySize: 128
+      Timeout: 100
+    Metadata: # Manage esbuild properties
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        Sourcemap: true
+        EntryPoints:
+        - src/app.ts
