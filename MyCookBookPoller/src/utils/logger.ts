@@ -21,14 +21,6 @@ export default class Logger {
                 format.prettyPrint(),
             ),
             transports: [
-                new transports.File({
-                    filename: 'combined.log',
-                    level: 'info',
-                }),
-                new transports.File({
-                    filename: 'errors.log',
-                    level: 'warn',
-                }),
                 new transports.Console({
                     format: format.combine(
                         format.colorize({
