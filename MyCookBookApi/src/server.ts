@@ -6,7 +6,7 @@ import 'reflect-metadata';
 import { container } from 'tsyringe';
 import express from 'express';  
 import cors from 'cors';
-import RecipeController from './controller/recipeController';
+import { UserController, RecipeController } from './controller';
 import Logger from './utils/logger';
 
 const logger = Logger.getInstance();
@@ -16,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/recipes", container.resolve(RecipeController).router());
+app.use("/user", container.resolve(UserController).router());
 
 app.get("/health", (req, res) => {res.send("Healthy")})
 
