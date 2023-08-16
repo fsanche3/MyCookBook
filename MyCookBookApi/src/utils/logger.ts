@@ -51,6 +51,6 @@ export default class Logger {
         Logger.logger.log('warn', message, obj);
     }
     error({ error, funcName }: { error: any; funcName: string }) {
-        Logger.logger.log('error', error, funcName);
+        Logger.logger.log('error', error.message, funcName);
     }
 }

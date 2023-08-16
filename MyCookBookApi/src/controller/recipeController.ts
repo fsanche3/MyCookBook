@@ -1,4 +1,4 @@
-import { Request, Response, Router} from "express";
+import { NextFunction, Request, Response, Router} from "express";
 import {autoInjectable} from "tsyringe"
 import RecipeService from "../service/recipeService";
 import Logger from "../utils/logger";
@@ -17,19 +17,18 @@ export default class RecipeController{
     }
 
     router(){
-        router.get("/", async (req, res) => await this.getAllRecipes(req, res));
+        router.get("/", async (req, res, next) => await this.getAllRecipes(req, res, next));
         return router;
     }
 
-    async getAllRecipes(req: Request, res: Response): Promise<void>{
+    async getAllRecipes(req: Request, res: Response, next: NextFunction): Promise<void>{
         try{
             const recipeList: GetRecipesResponse[] = await this.recipeServ.getRecipes();
-            throw new Error("nooooo")
-            //res.send(recipeList);
-
+            res.send(recipeList);
+            
         }catch(error){
             logger.error({error: error, funcName: "getAllRecipes Controller"})
-            throw error;
+            next(error);
         }
     }
 
