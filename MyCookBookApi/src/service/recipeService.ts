@@ -26,7 +26,7 @@ export default class RecipeService {
                 if (!containsRecipeTitle({ recipeTitle: dbRecipe.recipetitle ,
                     recipeList: recipesListResponse})) {
 
-            // If it does not, it adds the current recipe and ingredient
+            // If it does not, it stores the current recipe in desired format
                     recipesListResponse.push({
                         recipe: {
                             recipeTitle: dbRecipe.recipetitle,

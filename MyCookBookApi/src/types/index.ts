@@ -1,7 +1,6 @@
-export interface User {
-    id: any;
-    username: string;
-    password: string;
+export interface AccessTokens{
+    token: string;
+    refreshToken: string;
 }
 
 export interface GetRecipesResponse {
@@ -37,4 +36,10 @@ export interface DatabaseRecipesResponse {
     amount: number;
     unit: string;
     recipetitle: string;
+}
+
+export interface User {
+    id: any;
+    username: string;
+    password: string;
 }
