@@ -1,7 +1,7 @@
-import { string } from "yargs";
 import UserRepository from "../repository/userRepository";
 import Logger from "../utils/logger";
 import { autoInjectable } from "tsyringe"
+import bcrypt from 'bcrypt';
 
 const logger = Logger.getInstance();
 
@@ -16,11 +16,13 @@ export default class UserService {
 
     async addUser(body: { username: string, password: string }): Promise<boolean> {
         try {
-            const userExist: boolean = await this.userRepo.includesUsername(body.username);
+            const userAlreadyExist: boolean = await this.userRepo.includesUsername(body.username);
 
-            if (userExist) return false;
+            if (userAlreadyExist) return false;
 
-            await this.userRepo.saveUser({ username: body.username, password: body.password });
+            const hash = await bcrypt.hash(body.password, 10);
+
+            await this.userRepo.saveUser({ username: body.username, password: hash });
 
             return true;
 

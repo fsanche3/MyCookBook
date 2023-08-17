@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { autoInjectable } from "tsyringe"
 import Logger from "../utils/logger";
-import { GetRecipesResponse } from "../types";
 import UserService from "../service/userService";
 
 const router: Router = Router();
@@ -17,7 +16,7 @@ export default class UserController {
     }
 
     router() {
-        router.post("/", async (req, res, next) => await this.persistUser(req, res, next));
+        router.post("/persist", async (req, res, next) => await this.persistUser(req, res, next));
         return router;
     }
 
