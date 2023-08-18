@@ -18,8 +18,8 @@ export default class AuthController {
 
     router() {
         router.post("/login", async (req, res, next) => await this.login(req, res, next));
-        router.post("/token", async (req, res, next) => await this.refreshToken(req, res, next));
-        router.post("/logout", async (req, res, next) => await this.logout(req, res, next));
+        // router.post("/token", async (req, res, next) => await this.refreshToken(req, res, next));
+        // router.post("/logout", async (req, res, next) => await this.logout(req, res, next));
         return router;
     }
 

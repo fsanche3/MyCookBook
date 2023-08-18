@@ -22,16 +22,14 @@ export default class AuthService {
     async verifyAuth(body: { username: string, password: string }): Promise<AccessTokens | boolean> {
         try {
             const userList: User[] = await this.userRepo.includesUsername(body.username);
-
             if (!userList.length) return false;
 
             const validPassword: boolean = await bcrypt.compare(body.password, userList[0].password);
-
             if (!validPassword) return false;
 
-            const token = jwt.sign({ exp: 60, data: body.username }, (envVariables.TOKEN_SECRET ?? "token_secret"));
+            const token = jwt.sign({ exp: 60, data: userList[0].id }, (envVariables.TOKEN_SECRET ?? "token_secret"));
 
-            const refreshToken = jwt.sign({ exp: 120, data: body.username }, (envVariables.REFRESH_TOKEN_SECRET ?? "refresh_secret"));
+            const refreshToken = jwt.sign({ exp: 120, data: userList[0].id }, (envVariables.REFRESH_TOKEN_SECRET ?? "refresh_secret"));
 
             const tokens: AccessTokens = { token, refreshToken };
 

@@ -18,14 +18,14 @@ export default class AuthRepository {
     //     }
     // }
 
-    // async upsertRefreshToken(refreshToken: string): Promise<void> {
-    //     try {
-    //        console.log("Pretending to save: "+ refreshToken);
-    //     } catch (error) {
-    //         logger.error({ error: error, funcName: "upsertRefreshToken Repo" });
-    //         throw error;
-    //     }
-    // }
+    async upsertRefreshToken(refreshToken: string): Promise<void> {
+        try {
+           console.log("Pretending to save: "+ refreshToken);
+        } catch (error) {
+            logger.error({ error: error, funcName: "upsertRefreshToken Repo" });
+            throw error;
+        }
+    }
 
     async deleteRefreshToken({ username, password }: { username: string, password: string }): Promise<void> {
         try {
