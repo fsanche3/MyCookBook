@@ -1,10 +1,9 @@
 import { UserRepository, AuthRepository } from "../repository";
 import Logger from "../utils/logger";
-import { AccessTokens, User } from "../types";
+import { AccessTokens, DatabaseRefreshToken, User } from "../types";
 import { autoInjectable } from "tsyringe"
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken';
-import { envVariables } from "../environment/environment";
+import { createToken } from "../utils/helper";
 
 const logger = Logger.getInstance();
 
@@ -27,13 +26,13 @@ export default class AuthService {
             const validPassword: boolean = await bcrypt.compare(body.password, userList[0].password);
             if (!validPassword) return false;
 
-            const token = jwt.sign({ exp: 60, data: userList[0].id }, (envVariables.TOKEN_SECRET ?? "token_secret"));
+            const token = createToken({refreshToken: false, userId: userList[0].id});
 
-            const refreshToken = jwt.sign({ exp: 120, data: userList[0].id }, (envVariables.REFRESH_TOKEN_SECRET ?? "refresh_secret"));
+            const refreshToken = createToken({refreshToken: true, userId: userList[0].id});
 
             const tokens: AccessTokens = { token, refreshToken };
 
-            await this.authRepo.upsertRefreshToken(tokens.refreshToken);
+            await this.authRepo.upsertRefreshToken(tokens.refreshToken, userList[0].id);
 
             return tokens;
 
@@ -43,36 +42,37 @@ export default class AuthService {
         }
     }
 
-    // async verifyToken(body: { username: string, password: string }): Promise<boolean> {
-    //     try {
-    //         const userList: User[] = await this.userRepo.includesUsername(body.username);
+     async getRefreshToken(body: {token: string}): Promise<string> {
+        try {
+            const refreshTokenObj: DatabaseRefreshToken = await this.authRepo.getRefreshToken(body);
+            console.log(refreshTokenObj);
+            let token: string = "";
 
-    //         if (!userList.length) return false;
+            if(refreshTokenObj){
+                await this.authRepo.deleteRefreshToken(refreshTokenObj.appuser);
 
-    //         const validPassword: boolean = await bcrypt.compare(body.password, userList[0].password);
+                token = createToken({ refreshToken: true, userId: refreshTokenObj.appuser });
 
-    //         return validPassword ? true : false;
+                await this.authRepo.upsertRefreshToken(token, refreshTokenObj.appuser);
+            }
 
-    //     } catch (error) {
-    //         logger.error({ error: error, funcName: "verifyToken Service" });
-    //         throw error;
-    //     }
-    // }
+            return token;
 
-    // async getToken(body: { username: string, password: string }): Promise<boolean> {
-    //     try {
-    //         const userList: User[] = await this.userRepo.includesUsername(body.username);
+        } catch (error) {
+            logger.error({ error: error, funcName: "getToken Service" });
+            throw error;
+        }
+    }
 
-    //         if (!userList.length) return false;
+    async removeRefreshTokensFromDb(body: {userId: number}){
+      try {
+        await this.authRepo.deleteRefreshToken(body.userId);
 
-    //         const validPassword: boolean = await bcrypt.compare(body.password, userList[0].password);
+      } catch (error) {
+        logger.error({ error: error, funcName: "removeRefreshTokenFromDb Service" });
+        throw error;
+      } 
+    }
 
-    //         return validPassword ? true : false;
-
-    //     } catch (error) {
-    //         logger.error({ error: error, funcName: "getToken Service" });
-    //         throw error;
-    //     }
-    // }
 }
 

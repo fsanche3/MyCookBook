@@ -1,5 +1,6 @@
 import { getDB } from "../database";
-import { User } from "../types";
+import { DatabaseRefreshToken } from "../types";
+import { createToken } from "../utils/helper";
 import Logger from "../utils/logger";
 
 const { db } = getDB();
@@ -7,30 +8,31 @@ const logger = Logger.getInstance();
 
 export default class AuthRepository {
 
-    // async getRefreshToken(username: string): Promise<User[]> {
-    //     try {
-    //         const userList: User[] = await db.any(`SELECT * FROM CookBookUser WHERE username = '${username}'`);
-            
-    //         return userList;
-    //     } catch (error) {
-    //         logger.error({ error: error, funcName: "getRefreshToken Repo" });
-    //         throw error;
-    //     }
-    // }
-
-    async upsertRefreshToken(refreshToken: string): Promise<void> {
+    async getRefreshToken(body: { token: string }): Promise<DatabaseRefreshToken> {
         try {
-           console.log("Pretending to save: "+ refreshToken);
+            const tokenList: DatabaseRefreshToken[] = await db.any(`SELECT * FROM refreshtoken where rtoken = '${body.token}'`)
+
+            return tokenList[0];
+
+        } catch (error) {
+            logger.error({ error: error, funcName: "getRefreshToken Repo" });
+            throw error;
+        }
+    }
+
+    async upsertRefreshToken(refreshToken: string, userId: number): Promise<void> {
+        try {
+            await db.any(`INSERT INTO refreshtoken VALUES (default, '${refreshToken}', ${userId})`);
+
         } catch (error) {
             logger.error({ error: error, funcName: "upsertRefreshToken Repo" });
             throw error;
         }
     }
 
-    async deleteRefreshToken({ username, password }: { username: string, password: string }): Promise<void> {
+    async deleteRefreshToken(userId: number): Promise<void> {
         try {
-
-        await db.any(`INSERT INTO CookBookUser VALUES (default, '${username}', '${password}')`);
+            await db.any(`DELETE FROM refreshtoken WHERE appuser = ${userId}`);
 
         } catch (error) {
             logger.error({ error: error, funcName: "deleteRefreshToken Repo" });

@@ -21,6 +21,12 @@ export interface Recipe {
     }]
 }
 
+export interface DatabaseRefreshToken{
+    id: any;
+    rtoken: string;
+    appuser: number;
+}
+
 export interface DatabaseRecipesResponse {
     id: number;
     title: string;

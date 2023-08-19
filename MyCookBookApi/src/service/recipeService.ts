@@ -17,7 +17,6 @@ export default class RecipeService {
 
     async addFavoriteRecipe(body: {recipe: Recipe, userId: number}): Promise<void> {
         try {
-
             body.recipe.ingredients.forEach((ingredient) => {
                 ingredient.userId = body.userId;
             })

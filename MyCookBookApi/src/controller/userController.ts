@@ -24,10 +24,10 @@ export default class UserController {
         try {
             const resp: boolean = await this.userServ.addUser(req.body);
 
-            if (resp) {
-                res.status(200).json(resp);
-            } else {
+            if (!resp) {
                 res.status(400).json("Username is not unique");
+            } else {
+                res.status(200).json(resp);
             }
         } catch (error) {
             logger.error({ error: error, funcName: "persistUser Controller" })
