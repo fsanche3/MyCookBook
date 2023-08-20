@@ -37,9 +37,9 @@ export default class UserService {
         }
     }
 
-    async getFavoriteRecipes(): Promise<Recipe[]> {
+    async getFavoriteRecipes(body: {userId: number}): Promise<Recipe[]> {
         try {
-            const recipleList: DatabaseRecipesResponse[] = await this.recipeRepo.getFavoriteRecipeAndIngredients();
+            const recipleList: DatabaseRecipesResponse[] = await this.recipeRepo.getFavoriteRecipeAndIngredients(body.userId);
             let recipesListResponse: Recipe[] = [];
 
             recipleList.forEach((dbRecipe) => {

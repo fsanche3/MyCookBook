@@ -17,9 +17,10 @@ export default class RecipeRepository {
         }
     }
 
-    async getFavoriteRecipeAndIngredients(): Promise<DatabaseRecipesResponse[]> {
+    async getFavoriteRecipeAndIngredients(userId: number): Promise<DatabaseRecipesResponse[]> {
         try {
-            const recipeList: DatabaseRecipesResponse[] = await db.any("SELECT * FROM favoriterecipes INNER JOIN favoriteingredients ON favoriterecipes.title = favoriteingredients.recipetitle");
+            const recipeList: DatabaseRecipesResponse[] = await db.any(`SELECT * FROM favoriterecipes INNER JOIN favoriteingredients ON favoriterecipes.title = favoriteingredients.recipetitle \
+            where favoriterecipes.userid = ${userId}`);
             return recipeList;
         } catch (error) {
             logger.error({ error: error, funcName: "getFavoriteRecipeAndIngredients Repo" });
@@ -33,7 +34,7 @@ export default class RecipeRepository {
             '${recipe.vegan}', '${recipe.vegetarian}', '${recipe.instructions}', '${recipe.summary}', '${recipe.image}', 
             '${recipe.readyInMinutes}', '${recipe.type}', ${recipe.userId})`);
 
-            const cache = new pgp.helpers.ColumnSet(['title', 'amount', 'unit', 'recipetitle', 'userid'], { table: 'favoriteingredients' });
+            const cache = new pgp.helpers.ColumnSet(['title', 'amount', 'unit', 'recipetitle'], { table: 'favoriteingredients' });
             const query = pgp.helpers.insert(recipe.ingredients, cache);
 
             await db.any(query);

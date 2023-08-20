@@ -18,7 +18,7 @@ export default class UserController {
     }
 
     router() {
-        router.get("/favorite/recipes", async (req, res, next) => await this.getFavoriteRecipes(req, res, next));
+        router.get("/favorite/recipes", this.authenticateToken , async (req, res, next) => await this.getFavoriteRecipes(req, res, next));
         router.post("/persist", async (req, res, next) => await this.persistUser(req, res, next));
         return router;
     }
@@ -35,7 +35,7 @@ export default class UserController {
 
     async getFavoriteRecipes(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const recipeList: Recipe[] = await this.userServ.getFavoriteRecipes();
+            const recipeList: Recipe[] = await this.userServ.getFavoriteRecipes(req.body);
             res.send(recipeList);
 
         } catch (error) {

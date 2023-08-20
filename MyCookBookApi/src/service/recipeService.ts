@@ -19,7 +19,6 @@ export default class RecipeService {
         try {
 
             body.ingredients.forEach((ingredient) => {
-                ingredient.userid = body.userId;
                 ingredient.recipetitle = body.recipeTitle;
             })
 
