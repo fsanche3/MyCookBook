@@ -15,26 +15,29 @@ export default class RecipeService {
         this.reicpeRepo = recipeRepo;
     }
 
-    async addFavoriteRecipe(body: {recipe: Recipe, userId: number}): Promise<void> {
+    async addFavoriteRecipe(body: Recipe): Promise<void> {
         try {
-            body.recipe.ingredients.forEach((ingredient) => {
-                ingredient.userId = body.userId;
+
+            body.ingredients.forEach((ingredient) => {
+                ingredient.userid = body.userId;
+                ingredient.recipetitle = body.recipeTitle;
             })
 
             const recipe: Recipe = {
-                recipeTitle: body.recipe.recipeTitle,
-                servings: body.recipe.servings,
-                vegan: body.recipe.vegan,
-                vegetarian: body.recipe.vegetarian,
-                instructions: body.recipe.instructions,
-                summary: body.recipe.summary,
-                image: body.recipe.image,
-                readyInMinutes: body.recipe.readyInMinutes,
-                type: body.recipe.type,
-                ingredients: body.recipe.ingredients
+                recipeTitle: body.recipeTitle,
+                servings: body.servings,
+                vegan: body.vegan,
+                vegetarian: body.vegetarian,
+                instructions: body.instructions,
+                summary: body.summary,
+                image: body.image,
+                readyInMinutes: body.readyInMinutes,
+                type: body.type,
+                ingredients: body.ingredients,
+                userId: body.userId
             }
 
-            await this.reicpeRepo.addRecipeAndIngredients({ recipe: recipe, userId: body.userId });
+            await this.reicpeRepo.addRecipeAndIngredients({ recipe: recipe });
             
         } catch (error) {
             logger.error({ error: error, funcName: "getRecipes Service" });
@@ -70,6 +73,7 @@ export default class RecipeService {
                             ingredientTitle: dbRecipe.title,
                             amount: dbRecipe.amount,
                             unit: dbRecipe.unit,
+                            recipetitle: dbRecipe.recipetitle
                         }]
                     });
                 } else {
@@ -81,6 +85,7 @@ export default class RecipeService {
                                 ingredientTitle: dbRecipe.title,
                                 amount: dbRecipe.amount,
                                 unit: dbRecipe.unit,
+                                recipetitle: dbRecipe.recipetitle
                             });
                         };
                     });

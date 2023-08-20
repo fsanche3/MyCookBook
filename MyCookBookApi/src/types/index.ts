@@ -17,8 +17,10 @@ export interface Recipe {
         ingredientTitle: string;
         amount: number;
         unit: string;
-        userId?: number;
+        recipetitle: string;
+        userid?: number;
     }]
+    userId?: number;
 }
 
 export interface DatabaseRefreshToken{

@@ -28,7 +28,7 @@ export const createToken = ({ refreshToken, userId } :
             (envVariables.TOKEN_SECRET ?? "token_secret"), { expiresIn: 120 });
 
     } else {
-        token = jwt.sign({ id: userId, refreshToken: true },
+        token = jwt.sign({ userId, refreshToken: true },
             envVariables.REFRESH_TOKEN_SECRET ?? "refresh_secret", { expiresIn: 125 });
     }
 

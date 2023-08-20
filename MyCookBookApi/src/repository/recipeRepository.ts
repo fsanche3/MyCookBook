@@ -17,13 +17,23 @@ export default class RecipeRepository {
         }
     }
 
-    async addRecipeAndIngredients({ recipe, userId }: { recipe: Recipe, userId: any }): Promise<void> {
+    async getFavoriteRecipeAndIngredients(): Promise<DatabaseRecipesResponse[]> {
+        try {
+            const recipeList: DatabaseRecipesResponse[] = await db.any("SELECT * FROM favoriterecipes INNER JOIN favoriteingredients ON favoriterecipes.title = favoriteingredients.recipetitle");
+            return recipeList;
+        } catch (error) {
+            logger.error({ error: error, funcName: "getFavoriteRecipeAndIngredients Repo" });
+            throw error;
+        }
+    }
+
+    async addRecipeAndIngredients({ recipe }: { recipe: Recipe}): Promise<void> {
         try {
             await db.any(`INSERT INTO favoriterecipes VALUES (default, '${recipe.recipeTitle}', '${recipe.servings}',
             '${recipe.vegan}', '${recipe.vegetarian}', '${recipe.instructions}', '${recipe.summary}', '${recipe.image}', 
-            '${recipe.readyInMinutes}', '${recipe.type}', ${userId})`);
+            '${recipe.readyInMinutes}', '${recipe.type}', ${recipe.userId})`);
 
-            const cache = new pgp.helpers.ColumnSet(['title', 'amount', 'unit', 'recipetitle', 'userId'], { table: 'favoriteingredients' });
+            const cache = new pgp.helpers.ColumnSet(['title', 'amount', 'unit', 'recipetitle', 'userid'], { table: 'favoriteingredients' });
             const query = pgp.helpers.insert(recipe.ingredients, cache);
 
             await db.any(query);

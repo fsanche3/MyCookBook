@@ -10,16 +10,16 @@ export const verifyJwt = ({ token, request, response, nextFunc }:
 
     jwt.verify(token, envVariables.TOKEN_SECRET ?? "token_secret", (err, payload) => {
         if (!err?.message) {
-            request.body.userId = JSON.parse(JSON.stringify(payload)).id;
+            request.body.userId = JSON.parse(JSON.stringify(payload)).userId;
             nextFunc();
         } else {
             jwt.verify(token, envVariables.REFRESH_TOKEN_SECRET ?? "refresh_secret", (err, payload) => {
                 if (!err?.message) {
-                    request.body.userId = JSON.parse(JSON.stringify(payload)).id;
+                    request.body.userId = JSON.parse(JSON.stringify(payload)).userId;
                     nextFunc();
                 } else {
                     logger.warn({ message: "Bad Token Request Was Made"})
-                    response.status(403).json("Unable to perform Login: Authentication Failed")
+                    response.status(403).json("Unable to perform operation: Authentication Failed")
                 }
             });
         }

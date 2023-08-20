@@ -47,6 +47,7 @@ export default class RecipeController {
     async addRecipe(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             await this.recipeServ.addFavoriteRecipe(req.body);
+            res.status(200).json(true);
         } catch (error) {
             logger.error({ error: error, funcName: "addRecipe Controller" })
             next(error);
