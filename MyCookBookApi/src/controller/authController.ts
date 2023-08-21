@@ -53,11 +53,11 @@ export default class AuthController {
         try {
             
             const refreshToken : string = await this.authServ.getRefreshToken(req.body);
-
+            
             if (!refreshToken) {
-                res.status(400).json("Get Refresh Token Failed: Authentication failure");
+                res.status(400).json("Get Refresh Token Failed: Authentication failure Or Refresh Token Limit Reached");
             } else {
-                res.status(200).json(refreshToken);
+                res.status(200).json({refreshToken: refreshToken});
             }
         } catch (error) {
             logger.error({ error: error, funcName: "refreshToken Controller" })

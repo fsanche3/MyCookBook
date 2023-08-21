@@ -26,9 +26,9 @@ export default class AuthService {
             const validPassword: boolean = await bcrypt.compare(body.password, userList[0].password);
             if (!validPassword) return false;
 
-            const token = createToken({refreshToken: false, userId: userList[0].id});
+            const token = createToken({ refreshToken: false, userId: userList[0].id });
 
-            const refreshToken = createToken({refreshToken: true, userId: userList[0].id});
+            const refreshToken = createToken({ refreshToken: true, userId: userList[0].id });
 
             const tokens: AccessTokens = { token, refreshToken };
 
@@ -42,18 +42,23 @@ export default class AuthService {
         }
     }
 
-     async getRefreshToken(body: {token: string}): Promise<string> {
+    async getRefreshToken(body: { token: string }): Promise<string> {
         try {
             const refreshTokenObj: DatabaseRefreshToken = await this.authRepo.getRefreshToken(body);
+
+            refreshTokenObj.attempts ?? 0;
+
             console.log(refreshTokenObj);
             let token: string = "";
 
-            if(refreshTokenObj){
+            if (refreshTokenObj && refreshTokenObj.attempts < 2) {
+                
                 await this.authRepo.deleteRefreshToken(refreshTokenObj.appuser);
 
                 token = createToken({ refreshToken: true, userId: refreshTokenObj.appuser });
 
-                await this.authRepo.upsertRefreshToken(token, refreshTokenObj.appuser);
+                await this.authRepo.upsertRefreshToken(token, refreshTokenObj.appuser,
+                    refreshTokenObj.attempts + 1);
             }
 
             return token;
@@ -64,14 +69,14 @@ export default class AuthService {
         }
     }
 
-    async removeRefreshTokensFromDb(body: {userId: number}){
-      try {
-        await this.authRepo.deleteRefreshToken(body.userId);
+    async removeRefreshTokensFromDb(body: { userId: number }) {
+        try {
+            await this.authRepo.deleteRefreshToken(body.userId);
 
-      } catch (error) {
-        logger.error({ error: error, funcName: "removeRefreshTokenFromDb Service" });
-        throw error;
-      } 
+        } catch (error) {
+            logger.error({ error: error, funcName: "removeRefreshTokenFromDb Service" });
+            throw error;
+        }
     }
 
 }

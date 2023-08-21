@@ -20,9 +20,10 @@ export default class AuthRepository {
         }
     }
 
-    async upsertRefreshToken(refreshToken: string, userId: number): Promise<void> {
+    async upsertRefreshToken(refreshToken: string, userId: number, attempts?: number): Promise<void> {
         try {
-            await db.any(`INSERT INTO refreshtoken VALUES (default, '${refreshToken}', ${userId})`);
+            await db.any(`INSERT INTO refreshtoken VALUES (default, '${refreshToken}', ${userId},
+            ${attempts ?? 0})`);
 
         } catch (error) {
             logger.error({ error: error, funcName: "upsertRefreshToken Repo" });

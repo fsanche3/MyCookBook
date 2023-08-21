@@ -27,6 +27,7 @@ export interface DatabaseRefreshToken{
     id: any;
     rtoken: string;
     appuser: number;
+    attempts: number;
 }
 
 export interface DatabaseRecipesResponse {

@@ -24,12 +24,18 @@ export const createToken = ({ refreshToken, userId } :
     let token: string;
 
     if (!refreshToken) {
+        /*
+        ** Expires in fifteen minutes
+        */
         token = jwt.sign({ userId, refreshToken: false },
-            (envVariables.TOKEN_SECRET ?? "token_secret"), { expiresIn: 120 });
+            (envVariables.TOKEN_SECRET ?? "token_secret"), { expiresIn: 900 });
 
     } else {
+        /*
+        ** Expires in 6 hours
+        */
         token = jwt.sign({ userId, refreshToken: true },
-            envVariables.REFRESH_TOKEN_SECRET ?? "refresh_secret", { expiresIn: 125 });
+            envVariables.REFRESH_TOKEN_SECRET ?? "refresh_secret", { expiresIn: 21600 });
     }
 
     return token;
