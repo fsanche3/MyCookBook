@@ -48,10 +48,9 @@ export default class AuthService {
 
             refreshTokenObj.attempts ?? 0;
 
-            console.log(refreshTokenObj);
             let token: string = "";
 
-            if (refreshTokenObj && refreshTokenObj.attempts < 2) {
+            if (refreshTokenObj.rtoken && refreshTokenObj.attempts < 2) {
                 
                 await this.authRepo.deleteRefreshToken(refreshTokenObj.appuser);
 
