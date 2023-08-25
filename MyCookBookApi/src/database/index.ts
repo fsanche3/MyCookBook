@@ -1,5 +1,5 @@
 import pgPromise from 'pg-promise';
-import {envVariables} from '../environment/environment';
+import {envVariables} from '../environment';
 
 const pgp = pgPromise();
 

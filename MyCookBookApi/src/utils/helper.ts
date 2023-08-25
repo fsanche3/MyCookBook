@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { envVariables } from "../environment/environment";
+import { envVariables } from "../environment";
 import { Recipe } from "../types";
 
 export const containsRecipeTitle = ({ recipeTitle, recipeList }:

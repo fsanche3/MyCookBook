@@ -23,6 +23,15 @@ export interface Recipe {
     userId?: number;
 }
 
+export interface EnvVariables {
+    HOST: string; 
+    USER: string;
+    PASS: string;
+    DB: string;
+    TOKEN_SECRET: string;
+    REFRESH_TOKEN_SECRET: string;
+}
+
 export interface DatabaseRefreshToken{
     id: any;
     rtoken: string;

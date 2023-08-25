@@ -20,8 +20,6 @@ app.use("/recipes", container.resolve(RecipeController).router());
 app.use("/user", container.resolve(UserController).router());
 
 
-app.get("/health", (req, res) => {res.send("Healthy")})
-
 app.listen(3000, () => {
     logger.info({message: "Server started on port 3000"});
 })

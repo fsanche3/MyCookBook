@@ -8,15 +8,11 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 300
+    Timeout: 900
     Environment:
       Variables:
-        HOST: "localhost"
-        USER: "franklynsanchez"
-        PASS: "password"
-        DB: "postgres"
-        SpoonApiUrl: "https://api.spoonacular.com/recipes"
-        SpoonApiKey: "c0e096ec62d34637aa213a706c547587"
+        KmsResourceKey: "alias/managedSecretKeys"
+        EncryptedSecrets: "AQICAHhU+xgK1oJI4Kvxli5TFSmDFgJcylDHyErXuXKVirBevgFrEhnJLAqEgFLfEcUvlrYuAAABDzCCAQsGCSqGSIb3DQEHBqCB/TCB+gIBADCB9AYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwT1ke5ntdeEmsTo/ICARCAgcYKXtpTDTgYgjYIf37lFuaXaG87VLQzrA14etMkcsThZFdF/VthOpbpB4OT7UUdbh6RUa49Wo1d8Jay0em2wU6QlkYHRsj/ea/eINo3gr98WVaq1RHHjcInrNL6uG+sX/a0Af3DeK9Gg01ZWAqXjsEVOhSYLMd3yTgceiUUZdzK7FwQhsvLxd1aOMP+ZGahXRQh0X5ASAcVdyAH+Nm6CbWq31X0j875V9clzYbcnjmdLADzxjMRqu+rQiDwmgu9+nrgReX3L+k="
 
 Resources:
   ApiGateway:
