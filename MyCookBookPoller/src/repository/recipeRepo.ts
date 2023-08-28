@@ -31,7 +31,7 @@ export const processRecipes = async ({ recipes, recipeType }:
         await db.any(query);
 
     } catch (error) {
-        logger.error({message: error, funcName: "processRecipes"});
+        logger.error({ error, funcName: "processRecipes"});
     }
 }
 
@@ -39,6 +39,6 @@ export const deleteRecipes = async (): Promise<void> => {
     try {
         await db.any('DELETE FROM recipes');
     } catch (error) {
-        logger.error({message: error, funcName: "deleteRecipes"});
+        logger.error({ error, funcName: "deleteRecipes"});
     }
 }

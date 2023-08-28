@@ -42,7 +42,7 @@ export default class Logger {
     warn({ message, obj }: { message: string; obj?: any }) {
         Logger.logger.log('warn', message, obj);
     }
-    error({ message, funcName }: { message: any; funcName: string }) {
-        Logger.logger.log('error', message, funcName);
+    error({ error, funcName }: { error: any; funcName: string }) {
+        Logger.logger.log('error', error, funcName);
     }
 }

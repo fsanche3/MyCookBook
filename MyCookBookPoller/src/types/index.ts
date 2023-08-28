@@ -17,6 +17,16 @@ export interface DatabaseResponse {
 id: number;
 }
 
+export interface EnvVariables {
+    HOST: string; 
+    USER: string;
+    PASS: string;
+    DB: string;
+    SPOON_API_URL: string;
+    SPOON_API_KEY: string;
+}
+
+
 export interface DatabaseIngredient{
     title: string;
     amount: number;

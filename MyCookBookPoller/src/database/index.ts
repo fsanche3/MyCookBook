@@ -1,4 +1,5 @@
 import pgPromise from 'pg-promise';
+import { envVariables } from '../environment';
 
 const pgp = pgPromise();
 
@@ -20,7 +21,7 @@ interface IDatabaseScope {
 export function getDB(): IDatabaseScope {
     return createSingleton<IDatabaseScope>('my-app-db-space', () => {
         return {
-            db: pgp(`postgres://${process.env.USER}:${process.env.PASS}@${process.env.HOST}:5432/${process.env.DB}`
+            db: pgp(`postgres://${envVariables.USER}:${envVariables.PASS}@${envVariables.HOST}:5432/${envVariables.DB}`
             ),
             pgp
         };

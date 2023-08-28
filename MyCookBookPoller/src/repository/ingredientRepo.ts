@@ -2,10 +2,10 @@ import { getDB } from "../database";
 import { DatabaseIngredient, Recipe } from "../types";
 import Logger from "../utils/logger";
 
-const {db, pgp} = getDB();
+const { db, pgp } = getDB();
 const logger = Logger.getInstance();
 
-export const processIngredients = async ({recipes}: {recipes: Recipe[]}): Promise<void> => {
+export const processIngredients = async ({ recipes }: { recipes: Recipe[] }): Promise<void> => {
     try {
 
         const ingredients: DatabaseIngredient[] = [];
@@ -19,7 +19,6 @@ export const processIngredients = async ({recipes}: {recipes: Recipe[]}): Promis
                 ingredients.push({ title: ingredient.name, amount: ingredient.amount, unit: ingredient.unit, recipetitle: meal.title });
             })
         })
-
         const cache = new pgp.helpers.ColumnSet(['title', 'amount', 'unit', 'recipetitle']
             , { table: 'ingredients' });
         const query = pgp.helpers.insert(ingredients, cache);
@@ -27,7 +26,7 @@ export const processIngredients = async ({recipes}: {recipes: Recipe[]}): Promis
         await db.any(query);
 
     } catch (error) {
-        logger.error({message: error, funcName: "processIngredients"})
+        logger.error({ error, funcName: "processIngredients" })
     }
 }
 
@@ -35,6 +34,6 @@ export const deleteIngredients = async (): Promise<void> => {
     try {
         await db.any('DELETE FROM ingredients');
     } catch (error) {
-        logger.error({message: error, funcName: "deleteIngredients"})
+        logger.error({ error, funcName: "deleteIngredients" })
     }
 }
