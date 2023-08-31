@@ -8,18 +8,24 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 600
+    Timeout: 30
     Environment:
       Variables:
         KmsResourceKey: "alias/managedSecretKeys"
-        EncryptedSecrets: "AQICAHhU+xgK1oJI4Kvxli5TFSmDFgJcylDHyErXuXKVirBevgFrEhnJLAqEgFLfEcUvlrYuAAABDzCCAQsGCSqGSIb3DQEHBqCB/TCB+gIBADCB9AYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwT1ke5ntdeEmsTo/ICARCAgcYKXtpTDTgYgjYIf37lFuaXaG87VLQzrA14etMkcsThZFdF/VthOpbpB4OT7UUdbh6RUa49Wo1d8Jay0em2wU6QlkYHRsj/ea/eINo3gr98WVaq1RHHjcInrNL6uG+sX/a0Af3DeK9Gg01ZWAqXjsEVOhSYLMd3yTgceiUUZdzK7FwQhsvLxd1aOMP+ZGahXRQh0X5ASAcVdyAH+Nm6CbWq31X0j875V9clzYbcnjmdLADzxjMRqu+rQiDwmgu9+nrgReX3L+k="
+        EncryptedSecrets: "AQICAHhU+xgK1oJI4Kvxli5TFSmDFgJcylDHyErXuXKVirBevgGQQeG0tsziWBhabOBcGs5oAAACTTCCAkkGCSqGSIb3DQEHBqCCAjowggI2AgEAMIICLwYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxJLHZ/jLLLTwhhbssCARCAggIAelea8Gnm5VDHWca43CjY2CX+FPT87A+NDYymlHIbs6tPM4fqVGderD95X21bTbbQuUn97z93nKTak/y+KNeLMVoQapwluZDr/pa1+Z2Fbj3fabsh+1ramy7j78mrmPDMTEyjrWbouK7Bbz7PaB8ohGoH9RvFOU7v+gug+21CNTJoCMNX4rzOsZGg5z+FE70t5UaLduy5N+ZoTYUA+qFh1TF1owQtK7nMHPRjDYxWnVxjRlHd1bPM+ZNrXFRR5Er+TNTUMuOi1G4NTO3KVYMCg9wpQlfvflnvNhiBDdRngLlLOlphPKiOqG9BET9HFNYDJoRKYOVmVEeitbFyV4HAkcAwRUci2142G1YOnbEM0s3eWX0vV77qh8PBATfvC471mmYEXpRiYHyQP9/o2m4EvmcTVWfJF2c+N9OVWpbULg8voqSaZIaJ+cD4IDPwwZvpdUIHi7TUAUtvre3wAmhH6grtaaOL726C2U82+LeM7tJWsSYlM6fwHgH9JKKWFcv+2zPvHYUln19yMuHqE48/wgAseiJDNdj1bvmkHddHesuBIB5J/nzwIGPx/Ug9/Al8+dPn1DYiZ/2XjP8RNLExxUrn436nUvboEFUpeEdLY/PECYVRAExCq2JYVokLhSrMciai6WQz2hjcriJlu8CmCqyW9X5l1qdq7R0wQvgyFCI="
+
+Parameters: 
+  QueueName:
+    Type: String
+    Description: QueueName
+    Default: MyCookBookQueue
 
 Resources:
-  MealPollerFunction:
+  DeleteFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: .
-      Handler: src/app.lambdaHandler
+      Handler: src/handlers/deleteHandler.lambdaHandler
       Runtime: nodejs18.x
       Architectures:
       - x86_64
@@ -29,7 +35,7 @@ Resources:
           Properties:
             Schedule: cron(0 8 1 * ? *)
       MemorySize: 256
-      Timeout: 400
+      Timeout: 30
     Metadata: # Manage esbuild properties
       BuildMethod: esbuild
       BuildProperties:
@@ -37,4 +43,29 @@ Resources:
         Target: es2020
         Sourcemap: true
         EntryPoints:
-        - src/app.ts
+        - src/handlers/deleteHandler.ts
+
+  PopulateFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: .
+      Handler: src/handlers/populateHandler.lambdaHandler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 256
+      Timeout: 30
+      Events:
+        MySQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !Sub "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${QueueName}"
+            BatchSize: 10
+    Metadata: # Manage esbuild properties
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        Sourcemap: true
+        EntryPoints:
+        - src/handlers/populateHandler.ts

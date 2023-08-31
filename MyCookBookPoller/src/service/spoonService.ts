@@ -1,13 +1,12 @@
 import axios from 'axios';
-import { SpoonResponse } from '../types';
+import { EnvVariables, SpoonResponse } from '../types';
 import { deleteIngredients, processIngredients} from '../repository/ingredientRepo';
 import { deleteRecipes, processRecipes } from '../repository/recipeRepo';
 import Logger from "../utils/logger";
-import { envVariables } from '../environment';
 
 const logger = Logger.getInstance();
 
-export const pollForRecipes = async (): Promise<void> => {
+export const pollForRecipes = async ({envVariables}:{envVariables: EnvVariables}): Promise<void> => {
     try {
         /*
         ** Refresh and nuke recipes/ingredients every invoke

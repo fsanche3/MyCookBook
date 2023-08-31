@@ -8,55 +8,57 @@ const kms = new AWS.KMS({
     region: 'us-east-1'
 });
 
-let envVariables: EnvVariables;
+export const environment = async (): Promise<EnvVariables> => {
+    try {
+        /*
+        ** Checking truthyness of EncryptedSecrets since it's specific
+        ** to a template/local-lambbda invoke
+        */
+        if (process.env.EncryptedSecrets) {
 
-/*
-** Checking truthyness of EncryptedSecrets since it's specific
-** to a template/local-lambbda invoke
-*/
-if (process.env.EncryptedSecrets) {
+            const CiphertextBlob = process.env.EncryptedSecrets;
 
-    const CiphertextBlob = process.env.EncryptedSecrets;
-
-    const decryptParams = {
-        CiphertextBlob: Buffer.from(CiphertextBlob, 'base64'),
-        KeyId: process.env.KmsResourceKey
-    };
-
-    kms.decrypt(decryptParams, (error, data) => {
-        if (error) {
-            logger.error({ error, funcName: "Decrypting ENV Variables" });
-        } else {
+            const decryptParams = {
+                CiphertextBlob: Buffer.from(CiphertextBlob, 'base64'),
+                KeyId: process.env.KmsResourceKey
+            };
+            const data = await kms.decrypt(decryptParams).promise();
 
             const decryptedData = JSON.parse(data.Plaintext?.toString('binary') ?? "");
 
-            envVariables = {
+            const envVariables: EnvVariables = {
                 HOST: decryptedData.host,
                 USER: decryptedData.user,
                 PASS: decryptedData.pass,
                 DB: decryptedData.db,
                 SPOON_API_URL: decryptedData.spoonapiurl,
                 SPOON_API_KEY: decryptedData.spoonkey,
+                QUEUE_URL: decryptedData.queueurl
             }
 
-            logger.info({ message: "App Using Template Environment Variables" });
+            return envVariables;
+        } else {
+            /*
+            ** If EncryptedSecrets is false, the ENV variables are being extracted
+            ** from a dotenv file
+            */
+            const envVariables: EnvVariables = {
+                HOST: process.env.HOST!,
+                USER: process.env.USER!,
+                PASS: process.env.PASS!,
+                DB: process.env.DB!,
+                SPOON_API_URL: process.env.SPOON_API_URL!,
+                SPOON_API_KEY: process.env.SPOON_API_KEY!,
+                QUEUE_URL: process.env.QUEUE_URL!
+            }
+            logger.info({ message: "App Using Local Environment Variables" });
+            return envVariables;
         }
-    });
-
-} else { 
-    /*
-    ** If EncryptedSecrets is false, the ENV variables are being extracted
-    ** from a dotenv file
-    */   
-    envVariables = {
-        HOST: process.env.HOST!,
-        USER: process.env.USER!,
-        PASS: process.env.PASS!,
-        DB: process.env.DB!,
-        SPOON_API_URL: process.env.SPOON_API_URL!,
-        SPOON_API_KEY: process.env.SPOON_API_KEY!,
     }
-    logger.info({ message: "App Using Local Environment Variables" });
+    catch (error) {
+        logger.error({ error, funcName: "Get Environment Function" });
+        throw Error("Application Environment Variables Inaccessible");
+    }
+
 }
 
- export {envVariables};

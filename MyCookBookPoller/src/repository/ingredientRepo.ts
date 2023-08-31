@@ -2,12 +2,11 @@ import { getDB } from "../database";
 import { DatabaseIngredient, Recipe } from "../types";
 import Logger from "../utils/logger";
 
-const { db, pgp } = getDB();
 const logger = Logger.getInstance();
 
 export const processIngredients = async ({ recipes }: { recipes: Recipe[] }): Promise<void> => {
     try {
-
+        const { db, pgp } = await getDB();
         const ingredients: DatabaseIngredient[] = [];
 
         /*
@@ -32,6 +31,7 @@ export const processIngredients = async ({ recipes }: { recipes: Recipe[] }): Pr
 
 export const deleteIngredients = async (): Promise<void> => {
     try {
+        const { db, pgp } = await getDB();
         await db.any('DELETE FROM ingredients');
     } catch (error) {
         logger.error({ error, funcName: "deleteIngredients" })

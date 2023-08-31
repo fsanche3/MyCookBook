@@ -1,18 +1,18 @@
 {
   "type": "module",
-  "name": "hello_world",
+  "name": "MyCookBookPoller",
   "version": "1.0.0",
-  "description": "hello world sample for NodeJS",
-  "main": "app.js",
+  "description": "Poller",
   "repository": "https://github.com/awslabs/aws-sam-cli/tree/develop/samcli/local/init/templates/cookiecutter-aws-sam-hello-nodejs",
   "author": "SAM CLI",
   "license": "MIT",
   "scripts": {
     "unit": "jest",
     "lint": "eslint '*.ts' --quiet --fix",
+    "build": "npm run compile",
     "compile": "tsc",
     "test": "npm run compile && npm run unit",
-    "start": "sam build && sam local invoke",
+    "start": "sam build && sam local invoke PopulateFunction",
     "dev": "node --require dotenv/config --es-module-specifier-resolution=node --loader ts-node/esm src/server.ts"
   },
   "devDependencies": {

@@ -24,6 +24,7 @@ export interface EnvVariables {
     DB: string;
     SPOON_API_URL: string;
     SPOON_API_KEY: string;
+    QUEUE_URL: string;
 }
 
 

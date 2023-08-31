@@ -1,16 +1,14 @@
 {
     "compilerOptions": {
-      //"target": "es2020",
+      "target": "ES2020",
       "strict": true,
-      "preserveConstEnums": true,
-      //"noEmit": true,
-      "sourceMap": false,
-      "module":"es2015",
-      "moduleResolution":"node",
-      "esModuleInterop": true, 
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true,  
-      "outDir": "dist"
+      "noEmit": true,
+      "sourceMap": true,
+      "module": "ES2015",
+      "moduleResolution": "Node",
+      "esModuleInterop": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
     },
-    "exclude": ["node_modules", "**/*.test.ts"]
+     "exclude": ["node_modules", "**/*.test.ts"]
   }

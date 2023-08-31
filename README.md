@@ -14,4 +14,4 @@ This is a micro-service based application built using AWS SAM. This application 
 # AWS Cloud
 - KMS
 - SAM 
-- SQS 
+- SQS & SNS

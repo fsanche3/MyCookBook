@@ -1,6 +1,5 @@
 import { getDB } from "../database";
 import { DatabaseRefreshToken } from "../types";
-import { createToken } from "../utils/helper";
 import Logger from "../utils/logger";
 
 const { db } = getDB();
