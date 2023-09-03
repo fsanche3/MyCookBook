@@ -22,9 +22,9 @@ export const environment = async (): Promise<EnvVariables> => {
                 CiphertextBlob: Buffer.from(CiphertextBlob, 'base64'),
                 KeyId: process.env.KmsResourceKey
             };
-            const data = await kms.decrypt(decryptParams).promise();
+            const { Plaintext } = await kms.decrypt(decryptParams).promise();
 
-            const decryptedData = JSON.parse(data.Plaintext?.toString('binary') ?? "");
+            const decryptedData = JSON.parse(Plaintext?.toString('binary') ?? "");
 
             const envVariables: EnvVariables = {
                 HOST: decryptedData.host,

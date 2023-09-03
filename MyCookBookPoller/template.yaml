@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 30
+    Timeout: 800
     Environment:
       Variables:
         KmsResourceKey: "alias/managedSecretKeys"
@@ -19,23 +19,70 @@ Parameters:
     Type: String
     Description: QueueName
     Default: MyCookBookQueue
+  
+  DeleteFunctionName:
+    Type: String
+    Description: QueueName
+    Default: MyCookBook-DeleteFunction
 
 Resources:
+  CookBookRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: "CookBookRole"
+      ManagedPolicyArns: 
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+
+  CookBookPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: "CookBookPolicy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: [
+              "kms:Encrypt",
+              "kms:Decrypt",
+            ]
+            Resource: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/bc19e49f-c5c3-45ed-87b1-4aa2bf95f487"
+          - Effect: Allow
+            Action: [
+              "sqs:ReceiveMessage",
+              "sqs:DeleteMessage",
+              "sqs:SendMessage",
+              "sqs:GetQueueAttributes",
+            ]
+            Resource: !Sub "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${QueueName}"
+      Roles:
+        - !Ref CookBookRole 
+
   DeleteFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      FunctionName: !Ref DeleteFunctionName
       CodeUri: .
       Handler: src/handlers/deleteHandler.lambdaHandler
       Runtime: nodejs18.x
       Architectures:
       - x86_64
+      Role: !GetAtt CookBookRole.Arn
       Events:
         CloudWatchEvent:
           Type: Schedule
           Properties:
             Schedule: cron(0 8 1 * ? *)
-      MemorySize: 256
-      Timeout: 30
+      MemorySize: 1024
+      Timeout: 800
     Metadata: # Manage esbuild properties
       BuildMethod: esbuild
       BuildProperties:
@@ -53,8 +100,9 @@ Resources:
       Runtime: nodejs18.x
       Architectures:
       - x86_64
-      MemorySize: 256
-      Timeout: 30
+      Role: !GetAtt CookBookRole.Arn
+      MemorySize: 1024
+      Timeout: 800
       Events:
         MySQSEvent:
           Type: SQS
