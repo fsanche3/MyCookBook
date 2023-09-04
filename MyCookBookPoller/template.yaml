@@ -90,7 +90,7 @@ Resources:
         CloudWatchEvent:
           Type: Schedule
           Properties:
-            Schedule: cron(0/20 * ? * MON-SUN *)
+            Schedule: cron(0 0 */1 * ? *)
       MemorySize: 1024
       Timeout: 800
     Metadata: # Manage esbuild properties
