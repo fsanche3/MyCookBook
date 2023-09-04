@@ -10,7 +10,7 @@ This is a micro-service based application built using AWS SAM. This application 
 - JWT & Refresh Token Implementation
 - TypeScript Type Saftey
 
-# AWS Cloud
+# AWS Services
 - KMS
 - IAM
 - SQS
