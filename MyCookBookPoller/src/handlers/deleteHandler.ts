@@ -1,9 +1,9 @@
-import { pollForRecipes } from "../service/spoonService";
+import { clearRecipes } from "../service/spoonService";
 import Logger from "../utils/logger";
 import { environment } from "../environment";
 import AWS from "aws-sdk"
 
-const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
+const sqs = new AWS.SQS({apiVersion: '2012-11-05', region: "us-east-1"});
 
 const logger = Logger.getInstance();
 
@@ -11,16 +11,16 @@ export const lambdaHandler = async (event: any): Promise<void> => {
 
     const envVariables = await environment();
      
-    logger.info({ message: "Initiating Polling ..." });
+    logger.info({ message: "Initiating Recipe Deletion ..." });
 
-    await pollForRecipes({envVariables});
+    await clearRecipes();
 
     const params = {
         MessageBody: `Deleted Recipes at ${Date()}`,
         QueueUrl: envVariables.QUEUE_URL
       }
     
-    await sqs.sendMessage(params).promise();
+    const result = await sqs.sendMessage(params).promise();
 
-    logger.info({ message: "Polling Complete ..." });
+    logger.info({ message: "Recipe Deletion Complete ...", obj: result});
 };

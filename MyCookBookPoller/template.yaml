@@ -22,8 +22,18 @@ Parameters:
   
   DeleteFunctionName:
     Type: String
-    Description: QueueName
+    Description: Delete function name
     Default: MyCookBook-DeleteFunction
+  
+  PopulateFunctionName:
+    Type: String
+    Description: Populate function name
+    Default: MyCookBook-PopulateFunction
+
+  DeleteTokensFunctionName:
+    Type: String
+    Description: Delete Tokens function name
+    Default: MyCookBook-DeleteTokensFunction
 
 Resources:
   CookBookRole:
@@ -80,7 +90,7 @@ Resources:
         CloudWatchEvent:
           Type: Schedule
           Properties:
-            Schedule: cron(0 8 1 * ? *)
+            Schedule: cron(0/20 * ? * MON-SUN *)
       MemorySize: 1024
       Timeout: 800
     Metadata: # Manage esbuild properties
@@ -95,6 +105,7 @@ Resources:
   PopulateFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      FunctionName: !Ref PopulateFunctionName
       CodeUri: .
       Handler: src/handlers/populateHandler.lambdaHandler
       Runtime: nodejs18.x
@@ -117,3 +128,29 @@ Resources:
         Sourcemap: true
         EntryPoints:
         - src/handlers/populateHandler.ts
+
+  DeleteTokensFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: !Ref DeleteTokensFunctionName
+      CodeUri: .
+      Handler: src/handlers/refreshTokenHandler.lambdaHandler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      Role: !GetAtt CookBookRole.Arn
+      Events:
+        CloudWatchEvent:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 0 */2 * ? *)
+      MemorySize: 1024
+      Timeout: 800
+    Metadata: # Manage esbuild properties
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        Sourcemap: true
+        EntryPoints:
+        - src/handlers/deleteHandler.ts

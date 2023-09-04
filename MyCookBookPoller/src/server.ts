@@ -1,3 +1,5 @@
+import AWS from "aws-sdk"
+import { environment } from "./environment";
 import { pollForRecipes } from "./service/spoonService";
 import Logger from "./utils/logger";
 
@@ -8,13 +10,31 @@ import Logger from "./utils/logger";
 **
 */
 
+const sqs = new AWS.SQS({ apiVersion: '2012-11-05', region: "us-east-1" });
+
 const logger = Logger.getInstance();
 
 logger.info({ message: "Initiating Polling ..." });
 
 const start = async () => {
     try {
-        await pollForRecipes();
+        const envVariables = await environment();
+
+        const params = {
+            QueueUrl: envVariables.QUEUE_URL,
+        }
+
+        const {Messages} = await sqs.receiveMessage(params).promise();
+
+        const deleteParams = {
+            QueueUrl: envVariables.QUEUE_URL,
+            ReceiptHandle: Messages![0].ReceiptHandle!
+        }
+
+        await sqs.deleteMessage(deleteParams).promise();
+
+        console.log("resp --> ", JSON.parse(JSON.stringify(Messages)));
+
     } catch (error) {
         logger.error({ error, funcName: "Local invoke" });
     }

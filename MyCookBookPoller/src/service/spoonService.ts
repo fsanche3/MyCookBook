@@ -6,13 +6,19 @@ import Logger from "../utils/logger";
 
 const logger = Logger.getInstance();
 
-export const pollForRecipes = async ({envVariables}:{envVariables: EnvVariables}): Promise<void> => {
+export const clearRecipes = async (): Promise<void> =>{
     try {
-        /*
-        ** Refresh and nuke recipes/ingredients every invoke
-        */
+
         await deleteIngredients();
         await deleteRecipes();
+
+    } catch (error) {
+        logger.error({ error, funcName: "clearRecipes"});
+    }
+} 
+
+export const pollForRecipes = async ({envVariables} : {envVariables: EnvVariables}): Promise<void> => {
+    try {
 
         const generatedMealTypes = ['dinner', 'lunch', 'breakfast', 'snack'];
 
