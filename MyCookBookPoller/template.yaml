@@ -20,6 +20,11 @@ Parameters:
     Description: QueueName
     Default: MyCookBookQueue
   
+  CookBookLayerName:
+    Type: String
+    Description: Lambda Layer name
+    Default: MyCookBook-AppLayer
+  
   DeleteFunctionName:
     Type: String
     Description: Delete function name
@@ -80,8 +85,10 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       FunctionName: !Ref DeleteFunctionName
-      CodeUri: .
-      Handler: src/handlers/deleteHandler.lambdaHandler
+      CodeUri: handlers/
+      Handler: deleteHandler.lambdaHandler
+      Layers:
+        - !Ref MyCookBookLayer
       Runtime: nodejs18.x
       Architectures:
       - x86_64
@@ -100,14 +107,16 @@ Resources:
         Target: es2020
         Sourcemap: true
         EntryPoints:
-        - src/handlers/deleteHandler.ts
+        - deleteHandler.ts
 
   PopulateFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       FunctionName: !Ref PopulateFunctionName
-      CodeUri: .
-      Handler: src/handlers/populateHandler.lambdaHandler
+      CodeUri: handlers/
+      Handler: populateHandler.lambdaHandler
+      Layers:
+        - !Ref MyCookBookLayer      
       Runtime: nodejs18.x
       Architectures:
       - x86_64
@@ -127,14 +136,16 @@ Resources:
         Target: es2020
         Sourcemap: true
         EntryPoints:
-        - src/handlers/populateHandler.ts
+        - populateHandler.ts
 
   DeleteTokensFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       FunctionName: !Ref DeleteTokensFunctionName
-      CodeUri: .
-      Handler: src/handlers/refreshTokenHandler.lambdaHandler
+      CodeUri: handlers/
+      Handler: refreshTokenHandler.lambdaHandler
+      Layers:
+        - !Ref MyCookBookLayer
       Runtime: nodejs18.x
       Architectures:
       - x86_64
@@ -153,4 +164,19 @@ Resources:
         Target: es2020
         Sourcemap: true
         EntryPoints:
-        - src/handlers/deleteHandler.ts
+        - deleteHandler.ts
+
+  MyCookBookLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: !Ref CookBookLayerName
+      Description: App and Dependencies layer
+      ContentUri: src/
+      CompatibleRuntimes:
+        - nodejs18.x
+    # Metadata: # Manage esbuild properties
+    #   BuildMethod: esbuild
+    #   BuildProperties:
+    #     Minify: true
+    #     Target: es2020
+    #     Sourcemap: true

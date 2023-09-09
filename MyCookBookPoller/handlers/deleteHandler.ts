@@ -1,6 +1,6 @@
-import { clearRecipes } from "../service/spoonService";
-import Logger from "../utils/logger";
-import { environment } from "../environment";
+import { clearRecipes } from "../src/nodejs/service/spoonService";
+import Logger from "../src/nodejs/utils/logger";
+import { environment } from "../src/nodejs/environment";
 import AWS from "aws-sdk"
 
 const sqs = new AWS.SQS({apiVersion: '2012-11-05', region: "us-east-1"});

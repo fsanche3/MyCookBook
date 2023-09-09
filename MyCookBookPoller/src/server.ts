@@ -1,7 +1,7 @@
 import AWS from "aws-sdk"
-import { environment } from "./environment";
-import { pollForRecipes } from "./service/spoonService";
-import Logger from "./utils/logger";
+import { environment } from "./nodejs/environment";
+import { pollForRecipes } from "./nodejs/service/spoonService";
+import Logger from "./nodejs/utils/logger";
 
 /*
 **

@@ -1,6 +1,6 @@
-import Logger from "../utils/logger";
-import { environment } from "../environment";
-import { pollForRecipes } from "../service/spoonService";
+import Logger from "../src/nodejs/utils/logger";
+import { environment } from "../src/nodejs/environment";
+import { pollForRecipes } from "../src/nodejs/service/spoonService";
 
 const logger = Logger.getInstance();
 
