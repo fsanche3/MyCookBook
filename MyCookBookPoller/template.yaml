@@ -171,7 +171,7 @@ Resources:
     Properties:
       LayerName: !Ref CookBookLayerName
       Description: App and Dependencies layer
-      ContentUri: src/
+      ContentUri: layers/
       CompatibleRuntimes:
         - nodejs18.x
     # Metadata: # Manage esbuild properties
