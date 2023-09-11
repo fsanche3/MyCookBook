@@ -17,3 +17,4 @@ This is a micro-service based application built using AWS SAM. This application 
 - CloudFormation
 - CloudWatch
 - Lambda
+- RDS
