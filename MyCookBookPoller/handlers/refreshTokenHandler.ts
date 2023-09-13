@@ -1,5 +1,5 @@
-import { deleteTokens } from "../layers/nodejs/src/repository/authRepo";
-import Logger from "../layers/nodejs/src/utils/logger";
+import { deleteTokens } from "../layers/src/repository/authRepo";
+import Logger from "../layers/src/utils/logger";
 
 const logger = Logger.getInstance();
 

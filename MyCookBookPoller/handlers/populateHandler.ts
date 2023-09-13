@@ -1,6 +1,6 @@
-import Logger from "../layers/nodejs/src/utils/logger";
-import { environment } from "../layers/nodejs/src/environment";
-import { pollForRecipes } from "../layers/nodejs/src/service/spoonService";
+import Logger from "../layers/src/utils/logger";
+import { environment } from "../layers/src/environment";
+import { pollForRecipes } from "../layers/src/service/spoonService";
 
 const logger = Logger.getInstance();
 
