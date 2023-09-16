@@ -3,7 +3,7 @@ import { autoInjectable } from "tsyringe"
 import Logger from "../utils/logger";
 import AuthService from "../service/authService";
 import { AccessTokens } from "../types";
-import { verifyJwt } from "../middleware";
+import { verifyJwt } from "../middleware/jwt";
 
 const router: Router = Router();
 const logger = Logger.getInstance();

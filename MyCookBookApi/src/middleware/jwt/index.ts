@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response ,NextFunction } from "express";
-import { envVariables } from "../environment";
-import Logger from "../utils/logger";
+import { envVariables } from "../../environment";
+import Logger from "../../utils/logger";
 
 const logger = Logger.getInstance();
 

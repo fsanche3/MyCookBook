@@ -3,7 +3,7 @@ import { autoInjectable } from "tsyringe"
 import RecipeService from "../service/recipeService";
 import Logger from "../utils/logger";
 import { Recipe } from "../types";
-import { verifyJwt } from "../middleware";
+import { verifyJwt } from "../middleware/jwt";
 
 const router: Router = Router();
 const logger = Logger.getInstance();

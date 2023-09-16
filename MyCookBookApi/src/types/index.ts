@@ -60,3 +60,8 @@ export interface User {
     username: string;
     password: string;
 }
+
+export interface PersistUserRequest {
+    username: string;
+    password: string;
+}
