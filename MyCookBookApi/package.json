@@ -11,6 +11,7 @@
     "unit": "jest",
     "lint": "eslint '*.ts' --quiet --fix",
     "compile": "tsc",
+    "deploy": "sam deploy --capabilities CAPABILITY_NAMED_IAM",
     "test": "npm run compile && npm run unit",
     "dev": "node --require dotenv/config --es-module-specifier-resolution=node --loader ts-node/esm src/server.ts",
     "start": "sam build && sam local start-api"
@@ -34,6 +35,7 @@
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
     "tslib": "^2.6.1",
+    "tsyringe": "^4.8.0",
     "typescript": "^4.8.4"
   },
   "dependencies": {
@@ -50,7 +52,6 @@
     "jsonwebtoken": "^9.0.1",
     "pg-promise": "^11.5.3",
     "reflect-metadata": "^0.1.13",
-    "tsyringe": "^4.8.0",
     "winston": "^3.10.0"
   }
 }

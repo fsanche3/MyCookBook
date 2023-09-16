@@ -14,7 +14,50 @@ Globals:
         KmsResourceKey: "alias/managedSecretKeys"
         EncryptedSecrets: "AQICAHhU+xgK1oJI4Kvxli5TFSmDFgJcylDHyErXuXKVirBevgFrEhnJLAqEgFLfEcUvlrYuAAABDzCCAQsGCSqGSIb3DQEHBqCB/TCB+gIBADCB9AYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwT1ke5ntdeEmsTo/ICARCAgcYKXtpTDTgYgjYIf37lFuaXaG87VLQzrA14etMkcsThZFdF/VthOpbpB4OT7UUdbh6RUa49Wo1d8Jay0em2wU6QlkYHRsj/ea/eINo3gr98WVaq1RHHjcInrNL6uG+sX/a0Af3DeK9Gg01ZWAqXjsEVOhSYLMd3yTgceiUUZdzK7FwQhsvLxd1aOMP+ZGahXRQh0X5ASAcVdyAH+Nm6CbWq31X0j875V9clzYbcnjmdLADzxjMRqu+rQiDwmgu9+nrgReX3L+k="
 
+Parameters:
+  CookBookLayerName:
+    Type: String
+    Description: Lambda Layer name
+    Default: MyCookBook-APILayer
+
+  CookBookApiName:
+    Type: String
+    Description: Lambda API Name
+    Default: MyCookBook-API
+
 Resources:
+  CookBookRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: "CookBookRole"
+      ManagedPolicyArns: 
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+              
+  CookBookPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: "CookBookPolicy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: [
+              "kms:Encrypt",
+              "kms:Decrypt",
+            ]
+            Resource: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/bc19e49f-c5c3-45ed-87b1-4aa2bf95f487"
+      Roles:
+        - !Ref CookBookRole 
+
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
@@ -24,10 +67,15 @@ Resources:
         AllowMethods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
         AllowHeaders: "'*'"
         AllowOrigin: "'*'"
+
   APIRoutes:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Ref CookBookApiName   
+      Role: !GetAtt CookBookRole.Arn      
       Runtime: nodejs18.x
+      MemorySize: 1024
+      Timeout: 800
       CodeUri: .
       Handler: src/app.lambdaHandler
       Events:
