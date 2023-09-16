@@ -4,11 +4,12 @@
     "strict": true,
     "noEmit": false,
     "sourceMap": true,
-    "module": "ES2015",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "outDir": "./layers"
   },
   "exclude": [
     "node_modules",

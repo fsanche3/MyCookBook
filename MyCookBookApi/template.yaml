@@ -72,12 +72,14 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Ref CookBookApiName   
-      Role: !GetAtt CookBookRole.Arn      
+      Role: !GetAtt CookBookRole.Arn    
+      Layers:
+        - !Ref MyCookBookLayer        
       Runtime: nodejs18.x
       MemorySize: 1024
       Timeout: 800
-      CodeUri: .
-      Handler: src/app.lambdaHandler
+      CodeUri: handler/
+      Handler: app.lambdaHandler
       Events:
         APIEvent:
           Type: Api
@@ -88,8 +90,21 @@ Resources:
     Metadata: # Manage esbuild properties
       BuildMethod: esbuild
       BuildProperties:
+        External:
+          - layers      
         Minify: true
         Target: es2020
         Sourcemap: true
         EntryPoints:
-        - src/app.ts
+        - app.ts
+
+  MyCookBookLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: !Ref CookBookLayerName
+      Description: App and Dependencies layer
+      ContentUri: src/layers/
+      CompatibleRuntimes:
+        - nodejs18.x
+    Metadata: # Manage build properties
+      BuildMethod: makefile

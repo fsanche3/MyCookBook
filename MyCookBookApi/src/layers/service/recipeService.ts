@@ -2,18 +2,14 @@ import RecipeRepository from "../repository/recipeRepository";
 import { DatabaseRecipesResponse, Recipe } from "../types";
 import { containsRecipeTitle } from "../utils/helper";
 import Logger from "../utils/logger";
-import { autoInjectable } from "tsyringe"
+import { injectable } from "tsyringe"
 
 const logger = Logger.getInstance();
 
-@autoInjectable()
+@injectable()
 export default class RecipeService {
 
-    reicpeRepo: RecipeRepository;
-
-    constructor(recipeRepo: RecipeRepository) {
-        this.reicpeRepo = recipeRepo;
-    }
+    constructor(private recipeRepo: RecipeRepository) {}
 
     async addFavoriteRecipe(body: Recipe): Promise<void> {
         try {
@@ -36,7 +32,7 @@ export default class RecipeService {
                 userId: body.userId
             }
 
-            await this.reicpeRepo.addRecipeAndIngredients({ recipe: recipe });
+            await this.recipeRepo.addRecipeAndIngredients({ recipe: recipe });
             
         } catch (error) {
             logger.error({ error: error, funcName: "getRecipes Service" });
@@ -46,7 +42,7 @@ export default class RecipeService {
 
     async getRecipes(): Promise<Recipe[]> {
         try {
-            const recipleList: DatabaseRecipesResponse[] = await this.reicpeRepo.getRecipeAndIngredients();
+            const recipleList: DatabaseRecipesResponse[] = await this.recipeRepo.getRecipeAndIngredients();
             let recipesListResponse: Recipe[] = [];
 
             recipleList.forEach((dbRecipe) => {

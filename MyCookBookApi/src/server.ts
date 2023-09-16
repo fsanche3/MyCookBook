@@ -8,8 +8,8 @@ import 'reflect-metadata';
 import { container } from 'tsyringe';
 import express from 'express';  
 import cors from 'cors';
-import { UserController, RecipeController, AuthController } from './controller';
-import Logger from './utils/logger';
+import { UserController, RecipeController, AuthController } from './layers/controller';
+import Logger from './layers/utils/logger';
 
 const logger = Logger.getInstance();
 const app = express();
