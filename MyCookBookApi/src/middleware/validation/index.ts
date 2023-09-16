@@ -7,13 +7,12 @@ const logger = Logger.getInstance();
 export const Validator = 
     async (schema: ObjectSchema, req: Request, res: Response, next: NextFunction) => {
     try {
-
         await schema.validateAsync(req.body);
         
         next();
 
     } catch (error) {
-        logger.error({error, funcName: "ValidateJoi"});
+        logger.error({error, funcName: "Validator"});
 
         return res.status(422).json({ error });
     }

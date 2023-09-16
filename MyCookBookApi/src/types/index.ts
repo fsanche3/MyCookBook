@@ -61,7 +61,15 @@ export interface User {
     password: string;
 }
 
-export interface PersistUserRequest {
+export interface UserRequest {
     username: string;
     password: string;
+}
+
+export interface GetRefreshTokenRequest {
+    oldRefreshToken: string;
+}
+
+export interface GetFavoriteRecipesRequest{
+    userId: number;
 }

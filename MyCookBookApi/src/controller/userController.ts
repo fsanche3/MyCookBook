@@ -20,8 +20,8 @@ export default class UserController {
     }
 
     router() {
-        
-        router.get("/favorite/recipes", this.authenticateToken, 
+        router.get("/favorite/recipes", this.authenticateToken,
+        (req: Request, res: Response, next: NextFunction) => Validator(Schemas.userId, req, res, next), 
         async (req, res, next) => await this.getFavoriteRecipes(req, res, next));
 
         router.post("/persist", (req, res, next) => Validator(Schemas.user, req, res, next), 

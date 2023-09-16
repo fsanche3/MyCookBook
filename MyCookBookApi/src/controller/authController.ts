@@ -4,6 +4,8 @@ import Logger from "../utils/logger";
 import AuthService from "../service/authService";
 import { AccessTokens } from "../types";
 import { verifyJwt } from "../middleware/jwt";
+import { Validator } from "../middleware/validation";
+import { Schemas } from "../middleware/validation/schema";
 
 const router: Router = Router();
 const logger = Logger.getInstance();
@@ -18,17 +20,28 @@ export default class AuthController {
     }
 
     router() {
-        router.post("/login", async (req, res, next) => await this.login(req, res, next));
-        router.post("/token", async (req, res, next) => await this.refreshToken(req, res, next));
-        router.post("/logout", this.authenticateToken ,async (req, res, next) => await this.logout(req, res, next));
+
+        router.post("/login", (req, res, next) => Validator(Schemas.user, req, res, next),
+        async (req, res, next) => await this.login(req, res, next));
+        
+        router.post("/token", (req, res, next) => Validator(Schemas.refreshToken, req, res, next),
+        async (req, res, next) => await this.refreshToken(req, res, next));
+
+        router.post("/logout", this.authenticateToken, 
+        (req, res, next) => Validator(Schemas.userId, req, res, next),
+        async (req, res, next) => await this.logout(req, res, next));
+
         return router;
     }
 
     authenticateToken(req: Request, res: Response, next: NextFunction) {
         const authHeader = req.headers['authorization'];
+
         const token = authHeader && authHeader.split(' ')[1];
+
         if (token) { 
             verifyJwt({token: token, request: req, response: res , nextFunc: next})
+            
         } else {
             res.status(401).json("Unable to perform Token operation: Authentication Token Not found");
         }
@@ -40,6 +53,7 @@ export default class AuthController {
 
             if (!accessTokens) {
                 res.status(400).json("Login Failed: Incorrect username/password");
+
             } else {
                 res.status(200).json(accessTokens);
             }
@@ -56,6 +70,7 @@ export default class AuthController {
             
             if (!refreshToken) {
                 res.status(400).json("Get Refresh Token Failed: Authentication failure Or Refresh Token Limit Reached");
+                
             } else {
                 res.status(200).json({refreshToken: refreshToken});
             }

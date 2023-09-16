@@ -11,8 +11,11 @@ export default class AuthRepository {
         try {
             const tokenList: DatabaseRefreshToken[] = await db.any(`SELECT * FROM refreshtoken where rtoken = '${body.token}'`)
 
-            return tokenList[0];
+            if(!tokenList[0]){
+                throw new Error("Token does not exist");
+            }
 
+            return tokenList[0];
         } catch (error) {
             logger.error({ error: error, funcName: "getRefreshToken Repo" });
             throw error;

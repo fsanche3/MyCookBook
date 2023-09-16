@@ -10,6 +10,7 @@ export default class RecipeRepository {
     async getRecipeAndIngredients(): Promise<DatabaseRecipesResponse[]> {
         try {
             const recipeList: DatabaseRecipesResponse[] = await db.any("SELECT * FROM recipes INNER JOIN ingredients ON recipes.title = ingredients.recipetitle");
+            
             return recipeList;
         } catch (error) {
             logger.error({ error: error, funcName: "getRecipeAndIngredients Repo" });
@@ -21,6 +22,7 @@ export default class RecipeRepository {
         try {
             const recipeList: DatabaseRecipesResponse[] = await db.any(`SELECT * FROM favoriterecipes INNER JOIN favoriteingredients ON favoriterecipes.title = favoriteingredients.recipetitle \
             where favoriterecipes.userid = ${userId}`);
+
             return recipeList;
         } catch (error) {
             logger.error({ error: error, funcName: "getFavoriteRecipeAndIngredients Repo" });
