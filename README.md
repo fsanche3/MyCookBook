@@ -19,10 +19,11 @@ This is a Serverless application using Event Driven Architecture and it was buil
 - Environment Variable Encryption
 
 ## AWS Services
-- KMS
-- IAM
-- SQS
+- Lambda
+- API Gateway
 - CloudFormation
 - CloudWatch
-- Lambda
+- SQS
+- KMS
+- IAM
 - RDS

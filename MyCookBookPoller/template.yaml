@@ -23,7 +23,7 @@ Parameters:
   CookBookLayerName:
     Type: String
     Description: Lambda Layer name
-    Default: MyCookBook-AppLayer
+    Default: MyCookBook-PollerLayer
   
   DeleteFunctionName:
     Type: String
