@@ -7,4 +7,4 @@ build-MyCookBookLayer:
 	cp package.json package-lock.json "$(ARTIFACTS_DIR)/nodejs/" # for runtime deps
 	npm install --production --prefix "$(ARTIFACTS_DIR)/nodejs/" # for runtime deps
 	rm "$(ARTIFACTS_DIR)/nodejs/package.json" # for runtime deps
-	cp -r src "$(ARTIFACTS_DIR)/nodejs/node_modules"
+	cp -r layers "$(ARTIFACTS_DIR)/nodejs/node_modules"

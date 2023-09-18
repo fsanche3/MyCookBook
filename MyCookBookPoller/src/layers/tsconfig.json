@@ -11,7 +11,7 @@
       "esModuleInterop": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
-      "outDir": "./src"
+      "outDir": "./layers"
     },
      "exclude": ["node_modules", "**/*.test.ts"]
   }

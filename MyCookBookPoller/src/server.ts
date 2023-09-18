@@ -1,6 +1,6 @@
 import AWS from "aws-sdk"
 import { environment } from "./src/environment";
-import { pollForRecipes } from "./src/service/spoonService";
+import { clearRecipes } from "./src/service/spoonService";
 import Logger from "./src/utils/logger";
 
 /*
@@ -20,20 +20,9 @@ const start = async () => {
     try {
         const envVariables = await environment();
 
-        const params = {
-            QueueUrl: envVariables.QUEUE_URL,
-        }
+        await clearRecipes();
 
-        const {Messages} = await sqs.receiveMessage(params).promise();
-
-        const deleteParams = {
-            QueueUrl: envVariables.QUEUE_URL,
-            ReceiptHandle: Messages![0].ReceiptHandle!
-        }
-
-        await sqs.deleteMessage(deleteParams).promise();
-
-        console.log("resp --> ", JSON.parse(JSON.stringify(Messages)));
+        logger.info({ message: "Polling Complete ..." });
 
     } catch (error) {
         logger.error({ error, funcName: "Local invoke" });
@@ -42,4 +31,3 @@ const start = async () => {
 
 start();
 
-logger.info({ message: "Polling Complete ..." });
