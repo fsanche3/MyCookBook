@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { injectable } from "tsyringe"
 import Logger from "../utils/logger";
 import AuthService from "../service/authService";
 import { AccessTokens } from "../types";
@@ -10,7 +9,7 @@ import { Schemas } from "../middleware/validation/schema";
 const router: Router = Router();
 const logger = Logger.getInstance();
 
-@injectable()
+
 export default class AuthController {
 
     constructor(private authServ: AuthService) {

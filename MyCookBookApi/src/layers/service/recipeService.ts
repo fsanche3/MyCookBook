@@ -2,14 +2,13 @@ import RecipeRepository from "../repository/recipeRepository";
 import { DatabaseRecipesResponse, Recipe } from "../types";
 import { containsRecipeTitle } from "../utils/helper";
 import Logger from "../utils/logger";
-import { injectable } from "tsyringe"
 
 const logger = Logger.getInstance();
 
-@injectable()
-export default class RecipeService {
+export class RecipeService {
 
     constructor(private recipeRepo: RecipeRepository) {}
+    public static inject = ['recipeRepository'] as const;
 
     async addFavoriteRecipe(body: Recipe): Promise<void> {
         try {

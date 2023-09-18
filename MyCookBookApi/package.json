@@ -53,7 +53,8 @@
     "jsonwebtoken": "^9.0.1",
     "pg-promise": "^11.5.3",
     "reflect-metadata": "^0.1.13",
-    "winston": "^3.10.0",
-    "tsyringe": "^4.8.0"
+    "tsyringe": "^4.8.0",
+    "typed-inject": "^4.0.0",
+    "winston": "^3.10.0"
   }
 }

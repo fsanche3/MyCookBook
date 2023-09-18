@@ -1,6 +1,5 @@
 import UserRepository from "../repository/userRepository";
 import Logger from "../utils/logger";
-import { autoInjectable } from "tsyringe"
 import bcrypt from 'bcrypt';
 import { DatabaseRecipesResponse, Recipe, User } from "../types";
 import { RecipeRepository } from "../repository";
@@ -8,7 +7,6 @@ import { containsRecipeTitle } from "../utils/helper";
 
 const logger = Logger.getInstance();
 
-@autoInjectable()
 export default class UserService {
 
     userRepo: UserRepository;

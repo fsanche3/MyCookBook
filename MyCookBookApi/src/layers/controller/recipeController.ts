@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { injectable } from "tsyringe"
-import RecipeService from "../service/recipeService";
+//import { injectable } from "tsyringe"
+import {RecipeService} from "../service/recipeService";
 import Logger from "../utils/logger";
 import { Recipe } from "../types";
 import { verifyJwt } from "../middleware/jwt";
@@ -8,10 +8,10 @@ import { verifyJwt } from "../middleware/jwt";
 const router: Router = Router();
 const logger = Logger.getInstance();
 
-@injectable()
-export default class RecipeController {
-    constructor(private recipeServ: RecipeService) {
-    }
+//@injectable()
+export class RecipeController {
+    constructor(private recipeServ: RecipeService) {}
+    public static inject = ['recipeService'] as const;
 
     router() {
         router.get("/", async (req, res, next) => await this.getAllRecipes(req, res, next));

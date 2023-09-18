@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { autoInjectable } from "tsyringe"
 import Logger from "../utils/logger";
 import UserService from "../service/userService";
 import { verifyJwt } from "../middleware/jwt";
@@ -10,7 +9,6 @@ import { Schemas } from "../middleware/validation/schema";
 const router: Router = Router();
 const logger = Logger.getInstance();
 
-@autoInjectable()
 export default class UserController {
 
     userServ: UserService;

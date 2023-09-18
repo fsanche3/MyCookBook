@@ -1,4 +1,4 @@
-import RecipeController from "./recipeController";
+import {RecipeController} from "./recipeController";
 import UserController from "./userController";
 import AuthController from "./authController";
 

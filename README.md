@@ -11,7 +11,7 @@ This is a Serverless application using Event Driven Architecture and it was buil
 - Event-based auditability with SQS and Dead-Letter Queue (DLQ)
 
 ## Features For Application Development
-- Dependency Injection With tsyringe   
+- Dependency Injection With Typed Inject   
 - JWT & Refresh Token Implementation
 - Request Validator 
 - TypeScript Type Saftey

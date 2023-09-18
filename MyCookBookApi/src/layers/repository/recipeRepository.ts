@@ -1,12 +1,10 @@
 import { getDB } from "../database";
 import { DatabaseRecipesResponse, Recipe } from "../types";
 import Logger from "../utils/logger";
-import { injectable } from "tsyringe"
 
 const { db, pgp } = getDB();
 const logger = Logger.getInstance();
 
-@injectable()
 export default class RecipeRepository {
 
     async getRecipeAndIngredients(): Promise<DatabaseRecipesResponse[]> {

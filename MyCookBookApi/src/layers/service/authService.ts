@@ -1,16 +1,16 @@
 import { UserRepository, AuthRepository } from "../repository";
 import Logger from "../utils/logger";
 import { AccessTokens, DatabaseRefreshToken, User } from "../types";
-import { injectable } from "tsyringe"
+//import { injectable } from "tsyringe"
 import bcrypt from 'bcrypt'
 import { createToken } from "../utils/helper";
 
 const logger = Logger.getInstance();
 
-@injectable()
+//@injectable()
 export default class AuthService {
-    constructor(private userRepo: UserRepository, private authRepo: AuthRepository) {
-    }
+    constructor(private userRepo: UserRepository, private authRepo: AuthRepository) {}
+    public static inject = ['userRepository', 'authRepository'] as const;
 
     async verifyAuth(body: { username: string, password: string }): Promise<AccessTokens | boolean> {
         try {
