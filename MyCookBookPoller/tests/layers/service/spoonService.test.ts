@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {clearRecipes, pollForRecipes} from '../../../../src/layers/service/spoonService';
+import {clearRecipes, pollForRecipes} from '../../../src/layers/service/spoonService';
 
 jest.mock('axios');
 
