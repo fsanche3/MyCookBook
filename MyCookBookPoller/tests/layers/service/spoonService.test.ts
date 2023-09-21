@@ -30,14 +30,15 @@ describe("Test for Spoon Service", () => {
 
         // mockedAxios.mockResolvedValue(mockResp);
 
-        const spoonRepoSpy: jest.SpyInstance = jest.
-        spyOn({ pollForRecipes }, 'pollForRecipes');
+        const spoonRepoSpy: jest.SpyInstance = jest
+            .spyOn({ pollForRecipes }, 'pollForRecipes')
+            .mockResolvedValueOnce([]);
 
-        const ingredientRepoSpy: jest.SpyInstance = jest.
-            spyOn({ processIngredients }, 'processIngredients');
+        const ingredientRepoSpy: jest.SpyInstance = jest
+            .spyOn({ processIngredients }, 'processIngredients');
 
-        const recipeRepoSpy: jest.SpyInstance = jest.
-            spyOn({ processRecipes }, 'processRecipes');
+        const recipeRepoSpy: jest.SpyInstance = jest
+            .spyOn({ processRecipes }, 'processRecipes');
 
 
         await populateRecipes();
