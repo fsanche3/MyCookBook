@@ -1,6 +1,6 @@
-import Logger from "../layers/src/utils/logger";
-import { environment } from "../layers/src/environment";
-import { pollForRecipes } from "../layers/src/service/spoonService";
+import Logger from "../src/layers/utils/logger";
+import { environment } from "../src/layers/environment";
+import { populateRecipes } from "../src/layers/service/spoonService";
 
 const logger = Logger.getInstance();
 
@@ -10,7 +10,7 @@ export const lambdaHandler = async (event: any): Promise<void> => {
 
     const envVariables = await environment();
 
-    await pollForRecipes({envVariables});
+    await populateRecipes();
 
     logger.info({ message: "Recipe Upserts Complete ..."});
 };
