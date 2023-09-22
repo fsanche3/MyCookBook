@@ -26,8 +26,7 @@ export const pollForRecipes = async (): Promise<Recipe[]> => {
                 });
                 data.recipes.forEach((recipe => recipes.push(recipe)));
         }
-        return recipes;
-        
+        return recipes;     
     } catch (error) {
         logger.error({ error, funcName: "pollForRecipes"});
         throw(error);

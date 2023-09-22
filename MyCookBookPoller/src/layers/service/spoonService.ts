@@ -33,7 +33,7 @@ export const populateRecipes = async (): Promise<void> => {
         */
         recipes.forEach(meal => {
             if (meal.dishTypes.includes("dinner")) recipeType = 'dinner';
-            if (meal.dishTypes.includes("lunch")) recipeType = 'lunch';
+            if (meal.dishTypes.includes("lunch") && (Math.floor(Math.random() * 10) % 2 == 0)) recipeType = 'lunch';
             if (meal.dishTypes.includes("snack")) recipeType = 'snack';
             if (meal.dishTypes.includes("breakfast")) recipeType = 'breakfast';
 

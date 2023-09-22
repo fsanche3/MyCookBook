@@ -11,7 +11,7 @@
     "lint": "eslint '*.ts' --quiet --fix",
     "compile": "tsc",
     "test": "npm run compile && npm run unit",
-    "start": "sam build && sam local invoke DeleteFunction",
+    "start": "sam build && sam local invoke PopulateFunction",
     "deploy": "sam deploy --capabilities CAPABILITY_NAMED_IAM",
     "dev": "node --require dotenv/config --es-module-specifier-resolution=node --loader ts-node/esm src/server.ts"
   },

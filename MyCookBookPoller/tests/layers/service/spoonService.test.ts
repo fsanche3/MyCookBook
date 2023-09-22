@@ -7,7 +7,6 @@ jest.mock('../../../src/layers/repository/spoonRepo');
 jest.mock('../../../src/layers/repository/recipeRepo');
 jest.mock('../../../src/layers/repository/ingredientRepo');
 
-// const mockedAxios = axios as jest.MockedFunction<typeof axios>;
 describe("Test for Spoon Service", () => {
 
     it("Should invoke clear recipes and ingredients ", async () => {
@@ -25,10 +24,6 @@ describe("Test for Spoon Service", () => {
     })
 
     it("Should poll for recipes", async () => {
-
-        // const mockResp: SpoonResponse = { "data": { recipes: [] } };
-
-        // mockedAxios.mockResolvedValue(mockResp);
 
         const spoonRepoSpy: jest.SpyInstance = jest
             .spyOn({ pollForRecipes }, 'pollForRecipes')

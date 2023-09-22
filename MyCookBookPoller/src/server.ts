@@ -1,7 +1,7 @@
 import AWS from "aws-sdk"
-import { environment } from "./src/environment";
-import { clearRecipes } from "./src/service/spoonService";
-import Logger from "./src/utils/logger";
+import { environment } from "./layers/environment/index";
+import { clearRecipes, populateRecipes } from "./layers/service/spoonService";
+import Logger from "./layers/utils/logger";
 
 /*
 **
@@ -18,9 +18,8 @@ logger.info({ message: "Initiating Polling ..." });
 
 const start = async () => {
     try {
-        const envVariables = await environment();
-
-        await clearRecipes();
+        // await clearRecipes();
+        await populateRecipes();
 
         logger.info({ message: "Polling Complete ..." });
 
